@@ -1,100 +1,66 @@
-# The Internet Page
+# The Internet - Login Tests
 
-End-to-end automation project using Playwright for the public website "The Internet".
+Automated tests for the login page of https://the-internet.herokuapp.com/login,
+written with Playwright and TypeScript.
 
 ## Requirements
 
-To run this project successfully on another machine, use the following minimum and recommended versions:
+- Node.js 18 or newer
+- npm
 
-- Node.js 18+ (recommended: 20 LTS or newer)
-- npm 9+ (recommended: 10.x)
-- Playwright 1.64.1 or newer (installed via the project dependencies)
-- TypeScript 5.8.3 or newer (included as a dev dependency)
-- Chromium, Firefox, and WebKit browsers for Playwright, installed locally with:
+## Setup
 
 ```bash
-npx playwright install
-```
-
-This project has been validated with the current local dependency set in `package.json` and works on Windows, macOS, and Linux.
-
-## Installation
-
-1. Clone the repository.
-2. Open a terminal in the project root.
-3. Install the dependencies:
-
-```bash
+git clone https://github.com/Raybeth/pw-automation-assest.git
+cd pw-automation-assest
 npm install
-```
-
-4. Install the browser binaries required by Playwright:
-
-```bash
 npx playwright install
 ```
 
-5. Verify the setup:
-
-```bash
-npx playwright test --list
-```
-
-This installs the project dependencies and downloads the browsers used by the automation suite.
-
-## How to run the tests
-
-From the project root:
+## Running the tests
 
 ```bash
 npx playwright test
 ```
 
-To run a specific test:
+Other useful commands:
 
 ```bash
-npx playwright test tests/valid-login.spec.ts
-```
-
-To open the generated HTML report:
-
-```bash
+npx playwright test --grep @smoke     # only the smoke test
+npx playwright test --project=chromium
+npx playwright test --headed
 npx playwright show-report
 ```
+
+By default the tests run on Chromium, Firefox and WebKit.
+
+## What is tested
+
+- TC-01: valid login goes to the secure area
+- TC-02: invalid username shows an error and stays on the login page
+- TC-03: invalid password shows an error and stays on the login page
+- TC-04: logout goes back to the login page
 
 ## Project structure
 
 ```text
-TheInternetPage/
-├── data/
-│   ├── credentials.data.ts
-│   └── msjs.data.ts
-├── fixtures/
-│   ├── base.fixtures.ts
-├── pages/
-│   ├── login.pages.ts
-│   └── securearea.pages.ts
-├── tests/
-│   ├── invalid-login.spec.ts
-│   ├── logout.spec.ts
-│   └── valid-login.spec.ts
-├── playwright.config.ts
-├── package.json
-├── README.md
-├── test-results/
-├── playwright-report/
-└── node_modules/
+data/        credentials and expected messages
+fixtures/    fixtures that create the page objects
+pages/       page objects
+tests/       test files
+.github/     GitHub Actions workflow
 ```
 
-## Design decisions
+## How it is organized
 
-- The browser interaction logic was separated into the `pages/` folder so each page has a dedicated Page Object Model, making tests more readable, reusable, and easier to maintain.
-- User credentials and success/error messages were centralized in `data/` to avoid duplication and keep assertions consistent across scenarios.
-- A reusable base fixture in `fixtures/base.fixtures.ts` was added to share common Playwright custom fixtures, while the login fixture keeps the login page setup in one place.
-- The login fixture continues to open the login page before each test, reducing repeated navigation logic and standardizing the suite's initial state.
-- Tests are organized by scenario: valid login, invalid login, and logout. This makes selective execution easier and supports growth as new flows are added.
-- The project follows a clear testing architecture: data layer, fixture layer, page object layer, and test layer, which keeps the suite scalable and maintainable.
+Each page has its own page object with its locators and actions. The tests only
+call those actions and do the assertions, so the same `login` method is used for
+the valid and invalid cases.
 
-## Notes
+The fixture opens the login page before each test, which keeps the tests
+independent from each other.
 
-This project is intended as a foundation for practicing Playwright automation and structuring test suites in a clean, maintainable way.
+Credentials and messages are in `data/`. The credentials are the public ones
+given for this practice site.
+
+The GitHub Actions workflow runs the tests on every push to main.

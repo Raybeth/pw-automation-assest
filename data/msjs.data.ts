@@ -1,3 +1,6 @@
+/**
+ * Alerts exposed during login/logout flows.
+ */
 export const messages = {
     loginSuccess: "You logged into a secure area!",
     invalidUsername: "Your username is invalid!",

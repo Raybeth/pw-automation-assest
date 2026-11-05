@@ -1,3 +1,7 @@
+/**
+ * Page Object Model for the login screen.
+ * Encapsulates the selectors and actions used in authentication flows.
+ */
 import { test, Page, Locator } from "@playwright/test";
 
 export class LoginPage {
@@ -15,10 +19,16 @@ export class LoginPage {
     this.flashMessage = page.locator("#flash");
   }
 
+  /**
+   * Navigates to the public login page for the demo application.
+   */
   async goToLoginPage() {
     await this.page.goto("/login");
   }
 
+  /**
+   * Fills the login form and submits the credentials to authenticate.
+   */
   async login(username: string, password: string) {
     await test.step(`Login as "${username}"`, async () => {
       await this.username.fill(username);

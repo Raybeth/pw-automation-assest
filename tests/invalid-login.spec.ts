@@ -1,3 +1,6 @@
+/**
+ * Covers failed authentication attempts.
+ */
 import { test, expect } from "../fixtures/base.fixtures";
 import { invalidUsername, invalidPassword } from "../data/credentials.data";
 import { messages } from "../data/msjs.data";

@@ -1,3 +1,7 @@
+/**
+ * Validates the happy-path authentication flow.
+ * Confirms the user can log in and reach the secure area.
+ */
 import { test, expect } from "../fixtures/base.fixtures";
 import { validCredentials } from "../data/credentials.data";
 import { messages } from "../data/msjs.data";

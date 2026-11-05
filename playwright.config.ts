@@ -9,33 +9,34 @@ import { defineConfig, devices } from '@playwright/test';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 /**
- * See https://playwright.dev/docs/test-configuration.
+ * Detect whether the suite is running in CI so we can enable stricter checks and
+ * safer execution settings than the local developer workflow.
  */
 const isCI = !!process.env.CI;
 
 export default defineConfig({
   testDir: './tests',
-  /* Run tests in files in parallel */
+  /* Run test files in parallel for faster local execution. */
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
+  /* Prevent accidental test.only commits in CI build pipelines. */
   forbidOnly: isCI,
-  /* Retry on CI only */
+  /* Retry failed tests only in CI to reduce flaky builds without hiding local issues. */
   retries: isCI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
+  /* Use a single worker in CI to keep output and resource usage predictable. */
   workers: isCI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  /* Generate an HTML report for each test run. */
   reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  /* Shared browser and page settings used by all configured projects. */
   use: {
-    /* Base URL to use in actions like `await page.goto('')`. */
+    /* Base URL for the public Heroku app under test. */
     baseURL: 'https://the-internet.herokuapp.com/',
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    /* Capture a trace only when a test is retried, to save time and disk space on first runs. */
     trace: 'on-first-retry',
     screenshot: "only-on-failure",
   },
 
-  /* Configure projects for major browsers */
+  /* Execute the suite against Chromium, Firefox, and WebKit. */
   projects: [
     {
       name: 'chromium',

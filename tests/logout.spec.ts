@@ -1,3 +1,7 @@
+/**
+ * Verifies the logout flow.
+ * Ensures a logged-in user can end the session and return to the login screen.
+ */
 import { test, expect } from "../fixtures/base.fixtures";
 import { validCredentials } from "../data/credentials.data";
 import { messages } from "../data/msjs.data";
